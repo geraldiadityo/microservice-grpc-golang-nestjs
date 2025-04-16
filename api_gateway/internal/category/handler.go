@@ -43,3 +43,68 @@ func (h *HandlerCategory) GetCategories(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(res)
 }
+
+func (h *HandlerCategory) GetCategory(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "invalid Categpry ID",
+		})
+	}
+
+	res, err := h.repo.GetByID(int32(id))
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "category not found",
+		})
+	}
+
+	return ctx.JSON(res)
+}
+
+func (h *HandlerCategory) UpdateCategory(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid Category ID",
+		})
+	}
+
+	var req struct {
+		Name string `json:"name"`
+	}
+
+	if err := ctx.BodyParser(&req); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request Body",
+		})
+	}
+
+	res, err := h.repo.Update(int32(id), req.Name)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to update category",
+		})
+	}
+
+	return ctx.JSON(res)
+}
+
+func (h *HandlerCategory) DeleteCategory(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"erorr": "invalid category ID",
+		})
+	}
+
+	res, err := h.repo.Delete(int32(id))
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to delete category",
+		})
+	}
+
+	return ctx.JSON(res)
+}

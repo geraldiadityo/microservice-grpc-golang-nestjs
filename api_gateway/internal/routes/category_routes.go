@@ -10,4 +10,7 @@ func RegisterCategoryRoutes(router fiber.Router, handler *category.HandlerCatego
 	group := router.Group("/category")
 	group.Post("/create-category", handler.CreateCategory)
 	group.Get("/view", handler.GetCategories)
+	group.Get("/view/:id", handler.GetCategory)
+	group.Put("/update-category/:id", handler.UpdateCategory)
+	group.Delete("/delete-category/:id", handler.DeleteCategory)
 }
