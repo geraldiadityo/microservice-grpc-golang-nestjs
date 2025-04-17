@@ -1,6 +1,10 @@
 package category
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"api_gateway/internal/utils"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type HandlerCategory struct {
 	repo RepositoryCategory
@@ -18,57 +22,45 @@ func (h *HandlerCategory) CreateCategory(ctx *fiber.Ctx) error {
 	}
 
 	if err := ctx.BodyParser(&req); err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	res, err := h.repo.Create(req.Name)
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "failed to create category",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(res)
+	return utils.SuccessResponse(ctx, fiber.StatusCreated, "Success created category", res)
 }
 
 func (h *HandlerCategory) GetCategories(ctx *fiber.Ctx) error {
 	res, err := h.repo.GetAll()
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed get categories",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to get categories")
 	}
 
-	return ctx.JSON(res)
+	return utils.SuccessResponse(ctx, fiber.StatusOK, "success", res)
 }
 
 func (h *HandlerCategory) GetCategory(ctx *fiber.Ctx) error {
 	id, err := ctx.ParamsInt("id")
 
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "invalid Categpry ID",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusBadRequest, "invalid ID category")
 	}
 
 	res, err := h.repo.GetByID(int32(id))
 	if err != nil {
-		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "category not found",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusNotFound, "category not found!")
 	}
 
-	return ctx.JSON(res)
+	return utils.SuccessResponse(ctx, fiber.StatusOK, "found it", res)
 }
 
 func (h *HandlerCategory) UpdateCategory(ctx *fiber.Ctx) error {
 	id, err := ctx.ParamsInt("id")
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid Category ID",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusBadRequest, "Invalid category ID")
 	}
 
 	var req struct {
@@ -76,35 +68,27 @@ func (h *HandlerCategory) UpdateCategory(ctx *fiber.Ctx) error {
 	}
 
 	if err := ctx.BodyParser(&req); err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request Body",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusBadRequest, "invalid request body")
 	}
 
 	res, err := h.repo.Update(int32(id), req.Name)
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to update category",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to update category")
 	}
 
-	return ctx.JSON(res)
+	return utils.SuccessResponse(ctx, fiber.StatusOK, "Category success updated", res)
 }
 
 func (h *HandlerCategory) DeleteCategory(ctx *fiber.Ctx) error {
 	id, err := ctx.ParamsInt("id")
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"erorr": "invalid category ID",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusBadRequest, "invalid category ID")
 	}
 
 	res, err := h.repo.Delete(int32(id))
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to delete category",
-		})
+		return utils.ErrorResponse(ctx, fiber.StatusInternalServerError, "Failed to delete category")
 	}
 
-	return ctx.JSON(res)
+	return utils.SuccessResponse(ctx, fiber.StatusOK, "succcess deleted category", res)
 }

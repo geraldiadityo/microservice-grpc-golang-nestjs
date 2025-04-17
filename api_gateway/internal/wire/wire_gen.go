@@ -8,6 +8,7 @@ package wire
 
 import (
 	"api_gateway/config"
+	"api_gateway/internal/barang"
 	"api_gateway/internal/category"
 	"api_gateway/internal/server"
 )
@@ -25,8 +26,15 @@ func InitializeServer() (*server.Server, error) {
 	}
 	repositoryCategoryImpl := category.NewRepositoryCategory(client)
 	handlerCategory := category.NewHandlerCategory(repositoryCategoryImpl)
+	barangClient, err := barang.NewClientBarang(configConfig)
+	if err != nil {
+		return nil, err
+	}
+	repositoryBarangImpl := barang.NewRepositoryBarang(barangClient)
+	handlerBarang := barang.NewHandlerBarang(repositoryBarangImpl)
 	handlers := server.Handlers{
 		Category: handlerCategory,
+		Barang:   handlerBarang,
 	}
 	serverServer := server.NewServer(handlers)
 	return serverServer, nil

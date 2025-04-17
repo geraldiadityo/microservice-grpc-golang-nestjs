@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package barang;
+
+service BarangService {
+    rpc CreateBarang (CreateBarangRequest) returns (BarangResponse);
+    rpc GetBarangs (GetBarangsRequest) returns (GetBarangsResponse);
+    rpc GetBarang (GetBarangRequest) returns (BarangResponse);
+    rpc UpdateBarang (UpdateBarangRequest) returns (BarangResponse);
+    rpc DeleteBarang (DeleteBarangRequest) returns (DeleteBarangResponse);
+}
+
+message CreateBarangRequest {
+    string name = 1;
+    int32 categoryId = 2;
+}
+
+message GetBarangsRequest {
+}
+
+message GetBarangRequest {
+    int32 id = 1;
+}
+
+message UpdateBarangRequest {
+    int32 id = 1;
+    string name = 2;
+    int32 categoryId = 3;
+}
+
+message DeleteBarangRequest {
+    int32 id = 1;
+}
+
+message BarangResponse {
+    int32 id = 1;
+    string name = 2;
+    CategoryResponse category = 3;
+}
+
+message GetBarangsResponse {
+    repeated BarangResponse barangs = 1;
+}
+
+message DeleteBarangResponse {
+    bool success = 1;
+}
+
+message CategoryResponse {
+    int32 id = 1;
+    string name = 2;
+}

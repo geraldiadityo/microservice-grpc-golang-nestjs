@@ -5,6 +5,7 @@ package wire
 
 import (
 	"api_gateway/config"
+	"api_gateway/internal/barang"
 	"api_gateway/internal/category"
 	"api_gateway/internal/server"
 
@@ -18,6 +19,9 @@ func InitializeServer() (*server.Server, error) {
 
 		// category
 		category.ProviderSet,
+
+		// barang
+		barang.ProviderSet,
 
 		// server
 		server.NewServer,
