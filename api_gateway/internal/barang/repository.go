@@ -6,10 +6,10 @@ import (
 )
 
 type RepositoryBarangImpl struct {
-	client *Client
+	client barang.BarangServiceClient
 }
 
-func NewRepositoryBarang(client *Client) *RepositoryBarangImpl {
+func NewRepositoryBarang(client barang.BarangServiceClient) *RepositoryBarangImpl {
 	return &RepositoryBarangImpl{
 		client: client,
 	}
@@ -21,13 +21,13 @@ func (r *RepositoryBarangImpl) Create(name string, categoryId int32) (*barang.Ba
 		CategoryId: categoryId,
 	}
 
-	return r.client.service.CreateBarang(context.Background(), req)
+	return r.client.CreateBarang(context.Background(), req)
 }
 
 func (r *RepositoryBarangImpl) GetAll() (*barang.GetBarangsResponse, error) {
 	req := &barang.GetBarangsRequest{}
 
-	return r.client.service.GetBarangs(context.Background(), req)
+	return r.client.GetBarangs(context.Background(), req)
 }
 
 func (r *RepositoryBarangImpl) GetByID(id int32) (*barang.BarangResponse, error) {
@@ -35,7 +35,7 @@ func (r *RepositoryBarangImpl) GetByID(id int32) (*barang.BarangResponse, error)
 		Id: id,
 	}
 
-	return r.client.service.GetBarang(context.Background(), req)
+	return r.client.GetBarang(context.Background(), req)
 }
 
 func (r *RepositoryBarangImpl) Update(id int32, name string, categoryId int32) (*barang.BarangResponse, error) {
@@ -45,7 +45,7 @@ func (r *RepositoryBarangImpl) Update(id int32, name string, categoryId int32) (
 		CategoryId: categoryId,
 	}
 
-	return r.client.service.UpdateBarang(context.Background(), req)
+	return r.client.UpdateBarang(context.Background(), req)
 }
 
 func (r *RepositoryBarangImpl) Delete(id int32) (*barang.DeleteBarangResponse, error) {
@@ -53,9 +53,9 @@ func (r *RepositoryBarangImpl) Delete(id int32) (*barang.DeleteBarangResponse, e
 		Id: id,
 	}
 
-	return r.client.service.DeleteBarang(context.Background(), req)
+	return r.client.DeleteBarang(context.Background(), req)
 }
 
-func (r *RepositoryBarangImpl) Close() {
-	r.client.Close()
-}
+// func (r *RepositoryBarangImpl) Close() {
+// 	r.client.Close()
+// }

@@ -9,13 +9,14 @@ import (
 )
 
 func main() {
-	server, err := wire.InitializeServer()
+	app, err := wire.InitializeServer()
 	if err != nil {
 		log.Fatalf("Failed to Initialize serve: %v", err)
 	}
 
-	server.RegisterCleanup(func() {
+	app.Server.RegisterCleanup(func() {
 		log.Println("Clean up recource")
+		app.CleanupFunc()
 	})
 
 	quit := make(chan os.Signal, 1)
@@ -23,12 +24,12 @@ func main() {
 
 	go func() {
 		<-quit
-		if err := server.Shutdown(); err != nil {
+		if err := app.Server.Shutdown(); err != nil {
 			log.Printf("Shutdown error: %v", err)
 		}
 	}()
 
-	if err := server.Start(os.Getenv("HTTP_PORT")); err != nil {
+	if err := app.Server.Start(os.Getenv("HTTP_PORT")); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
 }

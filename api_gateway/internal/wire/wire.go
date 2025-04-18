@@ -7,26 +7,29 @@ import (
 	"api_gateway/config"
 	"api_gateway/internal/barang"
 	"api_gateway/internal/category"
+	"api_gateway/internal/client"
 	"api_gateway/internal/server"
 
 	"github.com/google/wire"
 )
 
-func InitializeServer() (*server.Server, error) {
+func InitializeServer() (*ServerWithCleanup, error) {
 	wire.Build(
 		// provider
 		config.ProvideConfig,
 
-		// category
-		category.ProviderSet,
+		// grpc client
+		client.ProvideSet,
 
-		// barang
+		// service
+		category.ProviderSet,
 		barang.ProviderSet,
 
 		// server
-		server.NewServer,
 		wire.Struct(new(server.Handlers), "*"),
+		server.NewServer,
+		newServerWithCleanup,
 	)
 
-	return &server.Server{}, nil
+	return &ServerWithCleanup{}, nil
 }

@@ -6,10 +6,10 @@ import (
 )
 
 type RepositoryCategoryImpl struct {
-	client *Client
+	client category.CategoryServiceClient
 }
 
-func NewRepositoryCategory(client *Client) *RepositoryCategoryImpl {
+func NewRepositoryCategory(client category.CategoryServiceClient) *RepositoryCategoryImpl {
 	return &RepositoryCategoryImpl{client: client}
 }
 
@@ -18,13 +18,13 @@ func (repo *RepositoryCategoryImpl) Create(name string) (*category.CategoryRespo
 		Name: name,
 	}
 
-	return repo.client.service.CreateCategory(context.Background(), req)
+	return repo.client.CreateCategory(context.Background(), req)
 }
 
 func (repo *RepositoryCategoryImpl) GetAll() (*category.GetCategoriesResponse, error) {
 	req := &category.GetCategoriesRequest{}
 
-	return repo.client.service.GetCategories(context.Background(), req)
+	return repo.client.GetCategories(context.Background(), req)
 }
 
 func (repo *RepositoryCategoryImpl) GetByID(id int32) (*category.CategoryResponse, error) {
@@ -32,7 +32,7 @@ func (repo *RepositoryCategoryImpl) GetByID(id int32) (*category.CategoryRespons
 		Id: id,
 	}
 
-	return repo.client.service.GetCategory(context.Background(), req)
+	return repo.client.GetCategory(context.Background(), req)
 }
 
 func (repo *RepositoryCategoryImpl) Update(id int32, name string) (*category.CategoryResponse, error) {
@@ -41,7 +41,7 @@ func (repo *RepositoryCategoryImpl) Update(id int32, name string) (*category.Cat
 		Name: name,
 	}
 
-	return repo.client.service.UpdateCategory(context.Background(), req)
+	return repo.client.UpdateCategory(context.Background(), req)
 }
 
 func (repo *RepositoryCategoryImpl) Delete(id int32) (*category.DeleteCategoryResponse, error) {
@@ -49,9 +49,5 @@ func (repo *RepositoryCategoryImpl) Delete(id int32) (*category.DeleteCategoryRe
 		Id: id,
 	}
 
-	return repo.client.service.DeleteCategory(context.Background(), req)
-}
-
-func (repo *RepositoryCategoryImpl) Close() {
-	repo.client.Close()
+	return repo.client.DeleteCategory(context.Background(), req)
 }

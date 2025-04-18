@@ -8,5 +8,4 @@ type RepositoryBarang interface {
 	GetByID(id int32) (*barang.BarangResponse, error)
 	Update(id int32, name string, categoryId int32) (*barang.BarangResponse, error)
 	Delete(id int32) (*barang.DeleteBarangResponse, error)
-	Close()
 }

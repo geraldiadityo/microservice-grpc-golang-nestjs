@@ -10,32 +10,32 @@ import (
 	"api_gateway/config"
 	"api_gateway/internal/barang"
 	"api_gateway/internal/category"
+	"api_gateway/internal/client"
 	"api_gateway/internal/server"
 )
 
 // Injectors from wire.go:
 
-func InitializeServer() (*server.Server, error) {
+func InitializeServer() (*ServerWithCleanup, error) {
 	configConfig, err := config.ProvideConfig()
 	if err != nil {
 		return nil, err
 	}
-	client, err := category.NewClientCategory(configConfig)
+	grpcClient, err := client.NewGrpcClient(configConfig)
 	if err != nil {
 		return nil, err
 	}
-	repositoryCategoryImpl := category.NewRepositoryCategory(client)
+	categoryServiceClient := category.ProvideCategoryClient(grpcClient)
+	repositoryCategoryImpl := category.NewRepositoryCategory(categoryServiceClient)
 	handlerCategory := category.NewHandlerCategory(repositoryCategoryImpl)
-	barangClient, err := barang.NewClientBarang(configConfig)
-	if err != nil {
-		return nil, err
-	}
-	repositoryBarangImpl := barang.NewRepositoryBarang(barangClient)
+	barangServiceClient := barang.ProvideBarangClient(grpcClient)
+	repositoryBarangImpl := barang.NewRepositoryBarang(barangServiceClient)
 	handlerBarang := barang.NewHandlerBarang(repositoryBarangImpl)
 	handlers := server.Handlers{
 		Category: handlerCategory,
 		Barang:   handlerBarang,
 	}
 	serverServer := server.NewServer(handlers)
-	return serverServer, nil
+	serverWithCleanup := newServerWithCleanup(serverServer, grpcClient)
+	return serverWithCleanup, nil
 }

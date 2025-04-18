@@ -8,5 +8,4 @@ type RepositoryCategory interface {
 	GetByID(id int32) (*category.CategoryResponse, error)
 	Update(id int32, name string) (*category.CategoryResponse, error)
 	Delete(id int32) (*category.DeleteCategoryResponse, error)
-	Close()
 }
