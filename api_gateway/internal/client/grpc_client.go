@@ -4,6 +4,7 @@ import (
 	"api_gateway/config"
 	"api_gateway/proto/barang"
 	"api_gateway/proto/category"
+	"api_gateway/proto/role"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -11,6 +12,7 @@ import (
 
 type GrpcClient struct {
 	barangConn *grpc.ClientConn
+	userConn   *grpc.ClientConn
 }
 
 func NewGrpcClient(cfg config.Config) (*GrpcClient, error) {
@@ -19,8 +21,14 @@ func NewGrpcClient(cfg config.Config) (*GrpcClient, error) {
 		return nil, err
 	}
 
+	userConn, err := grpc.NewClient(cfg.GRPCAddressUser, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
 	return &GrpcClient{
 		barangConn: barangConn,
+		userConn:   userConn,
 	}, nil
 }
 
@@ -30,6 +38,10 @@ func (g *GrpcClient) BarangClient() barang.BarangServiceClient {
 
 func (g *GrpcClient) CategoryClient() category.CategoryServiceClient {
 	return category.NewCategoryServiceClient(g.barangConn)
+}
+
+func (g *GrpcClient) RoleClient() role.RoleServiceClient {
+	return role.NewRoleServiceClient(g.userConn)
 }
 
 func (g *GrpcClient) Close() {

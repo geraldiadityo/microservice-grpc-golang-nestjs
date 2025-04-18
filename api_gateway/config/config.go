@@ -9,12 +9,13 @@ import (
 )
 
 type Config struct {
-	GRPCAddress  string        `env:"GRPC_ADDRESS" envDefault:"localhost:3001"`
-	HTTPPort     string        `env:"HTTP_PORT" envDefault:":3000"`
-	IdleTimeout  time.Duration `env:"IDLE_TIMEOUT" envDefault:"30s"`
-	ReadTimeout  time.Duration `env:"READ_TIMEOUT" envDefault:"10s"`
-	WriteTimeout time.Duration `env:"WRITE_TIMEOUT" envDefault:"10s"`
-	Debug        bool          `env:"DEBUG" envDefault:"false"`
+	GRPCAddress     string        `env:"GRPC_ADDRESS" envDefault:"localhost:3001"`
+	GRPCAddressUser string        `env:"GRPC_ADDRESS_USER" envDefault:"localhost:3002"`
+	HTTPPort        string        `env:"HTTP_PORT" envDefault:":3000"`
+	IdleTimeout     time.Duration `env:"IDLE_TIMEOUT" envDefault:"30s"`
+	ReadTimeout     time.Duration `env:"READ_TIMEOUT" envDefault:"10s"`
+	WriteTimeout    time.Duration `env:"WRITE_TIMEOUT" envDefault:"10s"`
+	Debug           bool          `env:"DEBUG" envDefault:"false"`
 }
 
 // func Load() (*Config, error) {

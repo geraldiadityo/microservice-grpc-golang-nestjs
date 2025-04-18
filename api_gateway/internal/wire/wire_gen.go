@@ -11,6 +11,7 @@ import (
 	"api_gateway/internal/barang"
 	"api_gateway/internal/category"
 	"api_gateway/internal/client"
+	"api_gateway/internal/role"
 	"api_gateway/internal/server"
 )
 
@@ -31,9 +32,13 @@ func InitializeServer() (*ServerWithCleanup, error) {
 	barangServiceClient := barang.ProvideBarangClient(grpcClient)
 	repositoryBarangImpl := barang.NewRepositoryBarang(barangServiceClient)
 	handlerBarang := barang.NewHandlerBarang(repositoryBarangImpl)
+	roleServiceClient := role.ProvideRoleClient(grpcClient)
+	repositoryRoleImpl := role.NewRepositoryRole(roleServiceClient)
+	handlerRole := role.NewHandlerRole(repositoryRoleImpl)
 	handlers := server.Handlers{
 		Category: handlerCategory,
 		Barang:   handlerBarang,
+		Role:     handlerRole,
 	}
 	serverServer := server.NewServer(handlers)
 	serverWithCleanup := newServerWithCleanup(serverServer, grpcClient)

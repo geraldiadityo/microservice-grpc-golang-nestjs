@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package role;
+
+option go_package = "api_gateway/role";
+
+service RoleService {
+    rpc CreateRole (CreateRoleRequest) returns (RoleResponse);
+    rpc GetRoles (GetRolesRequest) returns (RolesResponse);
+    rpc GetRole (GetRoleRequest) returns (RoleResponse);
+    rpc UpdateRole (UpdateRoleRequest) returns (RoleResponse);
+    rpc DeleteRole (DeleteRoleRequest) returns (DeleteRoleResponse);
+}
+
+message CreateRoleRequest {
+    string name = 1;
+}
+
+message GetRolesRequest {
+}
+
+message GetRoleRequest {
+    int32 id = 1;
+}
+
+message UpdateRoleRequest {
+    int32 id = 1;
+    string name = 2;
+}
+
+message DeleteRoleRequest {
+    int32 id = 1;
+}
+
+message RoleResponse {
+    int32 id = 1;
+    string name = 2;
+}
+
+message RolesResponse {
+    repeated RoleResponse roles = 1;
+}
+
+message DeleteRoleResponse {
+    bool success = 1;
+}
