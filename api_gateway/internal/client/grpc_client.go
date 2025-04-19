@@ -4,6 +4,7 @@ import (
 	"api_gateway/config"
 	"api_gateway/proto/barang"
 	"api_gateway/proto/category"
+	"api_gateway/proto/pengguna"
 	"api_gateway/proto/role"
 
 	"google.golang.org/grpc"
@@ -44,8 +45,16 @@ func (g *GrpcClient) RoleClient() role.RoleServiceClient {
 	return role.NewRoleServiceClient(g.userConn)
 }
 
+func (g *GrpcClient) PenggunaClient() pengguna.PenggunaServiceClient {
+	return pengguna.NewPenggunaServiceClient(g.userConn)
+}
+
 func (g *GrpcClient) Close() {
 	if g.barangConn != nil {
 		g.barangConn.Close()
+	}
+
+	if g.userConn != nil {
+		g.userConn.Close()
 	}
 }

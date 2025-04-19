@@ -4,6 +4,7 @@ import (
 	"api_gateway/internal/barang"
 	"api_gateway/internal/category"
 	"api_gateway/internal/middleware"
+	"api_gateway/internal/pengguna"
 	"api_gateway/internal/role"
 	"api_gateway/internal/routes"
 	"log"
@@ -16,6 +17,7 @@ type Handlers struct {
 	Category *category.HandlerCategory
 	Barang   *barang.HandlerBarang
 	Role     *role.HandlerRole
+	Pengguna *pengguna.HandlerPengguna
 }
 
 type Server struct {
@@ -65,6 +67,8 @@ func setupRoutes(app *fiber.App, handlers Handlers) {
 	routes.RegisterBarangRoutes(api, handlers.Barang)
 
 	routes.RegisterRoleRoutes(api, handlers.Role)
+
+	routes.RegisterPenggunaRoutes(api, handlers.Pengguna)
 
 	app.Get("/health", healtCheck)
 

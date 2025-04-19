@@ -10,9 +10,10 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       url: `localhost:${Number(port)}`,
-      package: ['role'],
+      package: ['role', 'pengguna'],
       protoPath: [
-        join(__dirname, '..', 'src/proto', 'role.proto')
+        join(__dirname, '..', 'src/proto', 'role.proto'),
+        join(__dirname, '..', 'src/proto', 'pengguna.proto')
       ]
     }
   });

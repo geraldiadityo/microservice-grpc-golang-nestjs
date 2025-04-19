@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package pengguna;
+
+import "role.proto";
+
+service PenggunaService {
+    rpc CreatePengguna (CreatePenggunaRequest) returns (PenggunaResponse);
+    rpc GetPenggunas (GetPenggunasRequest) returns (GetPenggunasResponse);
+    rpc GetPengguna (GetPenggunaRequest) returns (PenggunaResponse);
+    rpc UpdatePengguna (UpdatePenggunaRequest) returns (PenggunaResponse);
+    rpc DeletePengguna (DeletePenggunaRequest) returns (DeletePenggunaResponse);
+}
+
+message CreatePenggunaRequest {
+    string username = 1;
+    string name = 2;
+    string password = 3;
+    int32 roleId = 4;
+}
+
+message GetPenggunasRequest {
+}
+
+message GetPenggunaRequest {
+    int32 id = 1;
+}
+
+message UpdatePenggunaRequest {
+    int32 id = 1;
+    string username = 2;
+    string name = 3;
+    string password = 4;
+    int32 roleId = 5;
+}
+
+message DeletePenggunaRequest {
+    int32 id = 1;
+}
+
+message PenggunaResponse {
+    int32 id = 1;
+    string username = 2;
+    string name = 3;
+    role.RoleResponse role = 4;
+}
+
+message GetPenggunasResponse {
+    repeated PenggunaResponse penggunas = 1;
+}
+
+message DeletePenggunaResponse {
+    bool success = 1;
+}

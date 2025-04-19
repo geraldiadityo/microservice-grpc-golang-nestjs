@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package role;
 
-option go_package = "api_gateway/role";
+option go_package = "api_gateway/proto/role";
 
 service RoleService {
     rpc CreateRole (CreateRoleRequest) returns (RoleResponse);
